@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class conecta {
 	private String url ;
@@ -65,6 +67,26 @@ public ResultSet getBandas(int id) {
 	public void setMyRs(ResultSet myRs) {
 		this.myRs = myRs;
 	}
+	
+	public List<String> obtenerListaDeProveedores() {
+	    List<String> escenario = new ArrayList<>();
+
+	    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+	        String sql = "SELECT Escenario FROM proveedores";
+	        try (PreparedStatement statement = connection.prepareStatement(sql);
+	             ResultSet resultSet = statement.executeQuery()) {
+	            while (resultSet.next()) {
+	                String nombreproveedor = resultSet.getString("Escenario");
+	                escenario.add(nombreproveedor);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return escenario;
+	}
+
 	
 	public boolean Inserta(String nombre,int festival, int repertorio, String genero) {
 		 try {
