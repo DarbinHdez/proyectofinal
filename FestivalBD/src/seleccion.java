@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -78,10 +80,31 @@ public class seleccion extends JFrame {
 		comboBoxProv.setModel(bandasModel);
 
 		
-		JComboBox comboBoxBan = new JComboBox();
+		JComboBox<String> comboBoxBan = new JComboBox<String>();
 		comboBoxBan.setFont(new Font("Tw Cen MT Condensed", Font.BOLD, 16));
 		comboBoxBan.setBounds(121, 157, 122, 21);
 		contentPane.add(comboBoxBan);
+
+		comboBoxProv.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String provSeleccionado = (String) comboBoxProv.getSelectedItem();
+		        conexionBD.obtenerBandas(provSeleccionado);
+		    }
+		});
+		
+		comboBoxProv.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+
+		        comboBoxBan.removeAllItems();
+		        String proveedorSeleccionado = (String) comboBoxProv.getSelectedItem();
+		        List<String> bandas = conexionBD.obtenerBandas(proveedorSeleccionado);
+		        for (String banda : bandas) {
+		            comboBoxBan.addItem(banda);
+		        }
+		    }
+		});
+
+
 		
 		JList list = new JList();
 		list.setBounds(283, 71, 357, 245);
