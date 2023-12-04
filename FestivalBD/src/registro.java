@@ -74,8 +74,8 @@ public class registro extends JFrame {
 		lblNombre.setFont(new Font("Tw Cen MT", Font.BOLD, 16));
 		contentPane.add(lblNombre);
 		
-		JLabel lblAsistidos = new JLabel("Festivales Asistidos:");
-		lblAsistidos.setBounds(10, 93, 143, 13);
+		JLabel lblAsistidos = new JLabel("Conciertos Asistidos:");
+		lblAsistidos.setBounds(10, 93, 164, 13);
 		lblAsistidos.setFont(new Font("Tw Cen MT", Font.BOLD, 16));
 		contentPane.add(lblAsistidos);
 		
@@ -106,12 +106,12 @@ public class registro extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 				    String banda = textField.getText();
-				    int festival = Integer.parseInt(textField_1.getText());
+				    int conciertos = Integer.parseInt(textField_1.getText());
 				    int repertorio = Integer.parseInt(textField_4.getText());
 				    String genero = textField_2.getText();
 
 				    
-				    boolean r = conexionBD.Inserta(banda, festival, repertorio, genero);
+				    boolean r = conexionBD.Inserta(banda, conciertos, repertorio, genero);
 
 				    if (r) {
 				        JOptionPane.showMessageDialog(null, "Banda agregada correctamente.");

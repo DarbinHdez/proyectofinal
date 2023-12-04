@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class conecta {
 	private String url ;
@@ -52,7 +54,7 @@ public ResultSet getBandas(int id) {
 		try {
 			Connection   MyConn = DriverManager.getConnection(url, user, password);
 		     Statement myStmt  = MyConn.createStatement();
-	         myRs=  myStmt.executeQuery("SELECT * FROM bandas WHERE ID ="+ id);
+	         myRs=  myStmt.executeQuery("SELECT * FROM bandas WHERE ID_Banda ="+ id);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,12 +68,32 @@ public ResultSet getBandas(int id) {
 		this.myRs = myRs;
 	}
 	
+	public List<String> obtenerListaDeProveedores() {
+	    List<String> escenario = new ArrayList<>();
+
+	    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+	        String sql = "SELECT Escenario FROM proveedores";
+	        try (PreparedStatement statement = connection.prepareStatement(sql);
+	             ResultSet resultSet = statement.executeQuery()) {
+	            while (resultSet.next()) {
+	                String nombreproveedor = resultSet.getString("Escenario");
+	                escenario.add(nombreproveedor);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return escenario;
+	}
+
+	
 	public boolean Inserta(String nombre,int festival, int repertorio, String genero) {
 		 try {
 			 Connection MyConn = DriverManager.getConnection(url, user, password);
 			 Statement myStmt  = MyConn.createStatement();
 			 String sql = "INSERT INTO bandas"
-			 +"(Banda, `No.festivales`, `Repertorio de canciones`, Genero)"
+			 +"(Banda, `Conciertos`, `Repertorio de canciones`, Genero)"
 			 + "VALUES('"+ nombre +"','"+ festival +"','"+ repertorio +"','"+ genero +"')";
 		     myStmt.executeUpdate(sql);
 		     return true;
@@ -91,7 +113,7 @@ public ResultSet getBandas(int id) {
 			 Connection MyConn = DriverManager.getConnection(url, user, password);
 			 Statement myStmt  = MyConn.createStatement();
 	
-			 String sql = "Delete from bandas Where ID="+id;
+			 String sql = "Delete from bandas Where ID_Banda="+id;
 		     myStmt.executeUpdate(sql);
 		     return true;
 		     
@@ -102,6 +124,32 @@ public ResultSet getBandas(int id) {
 	    }
 		
 	}
+
+	public List<String> obtenerBandas(String provSeleccionado) {
+		 List<String> bandasDelProveedor = new ArrayList<>();
+
+		    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+		    	String sql = "SELECT bandas.Banda " + "FROM bandas " +
+	                     "INNER JOIN proveedores ON bandas.Conciertos >= proveedores.Conciertos " +
+	                     "WHERE proveedores.Escenario = ?";
+		        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+		            statement.setString(1, provSeleccionado);
+
+		            try (ResultSet resultSet = statement.executeQuery()) {
+		                while (resultSet.next()) {
+		                    String banda = resultSet.getString("Banda");
+		                    bandasDelProveedor.add(banda);
+		                }
+		            }
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+
+		    return bandasDelProveedor;
+		
+	}
+
 
 
 }

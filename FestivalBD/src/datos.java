@@ -23,7 +23,7 @@ public class datos extends JFrame {
    
         modeloTabla.addColumn("ID");
         modeloTabla.addColumn("Nombre");
-        modeloTabla.addColumn("Festivales Asistidos");
+        modeloTabla.addColumn("Conciertos Asistidos");
         modeloTabla.addColumn("Repertorio de canciones");
         modeloTabla.addColumn("Genero");
 
@@ -33,7 +33,7 @@ public class datos extends JFrame {
                 modeloTabla.addRow(new Object[]{
                         datos.getInt("ID"),
                         datos.getString("Banda"),
-                        datos.getInt("No.Festivales"),
+                        datos.getInt("No.Conciertos"),
                         datos.getInt("Repertorio de canciones"),
                         datos.getString("Genero")
                         
